@@ -8,9 +8,12 @@ struct Config {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let config: Config = parse_config(&args);
+    let config: Config = Config::new(&args);
 
-    println!("Searching for: {}, In file: {}", config.query, config.file_path);
+    println!(
+        "Searching for: {}, In file: {}",
+        config.query, config.file_path
+    );
 
     let contents = match fs::read_to_string(config.file_path) {
         Ok(contents) => contents,
@@ -21,8 +24,10 @@ fn main() {
     println!("Contents: {contents}")
 }
 
-fn parse_config(args: &[String]) -> Config{
-    let query = args[1].clone();
-    let file_path = args[2].clone();
-    Config{query,file_path}
-} 
+impl Config {
+    fn new(args: &[String]) -> Config {
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+        Config { query, file_path }
+    }
+}
