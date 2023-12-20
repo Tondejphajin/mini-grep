@@ -1,4 +1,5 @@
 use std::env::{self};
+use std::error::Error;
 use std::fs;
 use std::process;
 
@@ -19,13 +20,10 @@ fn main() {
         config.query, config.file_path
     );
 
-    let contents = match fs::read_to_string(config.file_path) {
-        Ok(contents) => contents,
-        Err(error) => {
-            panic!("Problem reading the file: {:?}", error);
-        }
-    };
-    println!("Contents: {contents}")
+    if let Err(e) = run(config) {
+        println!("Application error: {e}");
+        process::exit(1);
+    }
 }
 
 impl Config {
@@ -38,4 +36,11 @@ impl Config {
         let file_path = args[2].clone();
         Ok(Config { query, file_path })
     }
+}
+
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.file_path)?;
+    println!("Contents: \n{contents}");
+
+    Ok(())
 }
