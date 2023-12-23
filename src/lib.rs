@@ -17,7 +17,7 @@ impl Config {
         let query = args[1].clone();
         let file_path = args[2].clone();
 
-        let ignore_case = env::var("IGNORE_CASE").is_ok();
+        let ignore_case = env::var("IGNORE_CASE").is_ok(); //Test => $Env:IGNORE_CASE=1;
 
         Ok(Config {
             query,
